@@ -633,28 +633,29 @@ ServerHandlerImp::processRequest (Port const& port,
                 remoteIPAddress, user);
         }
 
-        Resource::Consumer usage;
-        if (isUnlimited(role))
-        {
-            usage = m_resourceManager.newUnlimitedEndpoint(
-                remoteIPAddress.to_string());
-        }
-        else
-        {
-            usage = m_resourceManager.newInboundEndpoint(remoteIPAddress);
-            if (usage.disconnect())
-            {
-                if (!batch)
-                {
-                    HTTPReply(503, "Server is overloaded", output, rpcJ);
-                    return;
-                }
-                Json::Value r = jsonRPC;
-                r[jss::error] = make_json_error(server_overloaded, "Server is overloaded");
-                reply.append(r);
-                continue;
-            }
-        }
+        // Resource::Consumer usage;
+        // if (isUnlimited(role))
+        // {
+        //     usage = m_resourceManager.newUnlimitedEndpoint(
+        //         remoteIPAddress.to_string());
+        // }
+        // else
+        // {
+        //     usage = m_resourceManager.newInboundEndpoint(remoteIPAddress);
+        //     if (usage.disconnect())
+        //     {
+        //         if (!batch)
+        //         {
+        //             HTTPReply(503, "Server is overloaded", output, rpcJ);
+        //             return;
+        //         }
+        //         Json::Value r = jsonRPC;
+        //         r[jss::error] = make_json_error(server_overloaded, "Server is overloaded");
+        //         reply.append(r);
+        //         continue;
+        //     }
+        // }
+        Resource::Consumer usage = m_resourceManager.newUnlimitedEndpoint(remoteIPAddress.to_string());
 
         if (role == Role::FORBID)
         {
